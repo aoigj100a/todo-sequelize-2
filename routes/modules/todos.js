@@ -6,7 +6,9 @@ const Todo = db.Todo
 
 router.get('/:id', (req, res) => {
   const id = req.params.id
-  return Todo.findByPk(id)
+  return Todo.findOne({
+    where: { id, UserId }
+  })
     .then(todo => res.render('detail', { todo: todo.toJSON() }))
     .catch(error => console.log(error))
 })
