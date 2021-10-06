@@ -17,6 +17,17 @@ router.post('/', (req, res) => {
     .catch(error => console.log(error))
 })
 
+router.get('/:id', (req, res) => {
+  const UserId = req.user.id
+  const id = req.params.id
+
+  return Todo.findOne({
+    where: { id, UserId }
+  })
+    .then(todo => res.render('detail', { todo: todo.toJSON() }))
+    .catch(error => console.log(error))
+})
+
 router.get('/:id/edit', (req, res) => {
   const UserId = req.user.id
   const id = req.params.id
@@ -42,12 +53,13 @@ router.put('/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
-router.get('/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
+  const UserId = req.user.id
   const id = req.params.id
-  return Todo.findOne({
-    where: { id, UserId }
-  })
-    .then(todo => res.render('detail', { todo: todo.toJSON() }))
+
+  return Todo.findOne({ where: { id, UserId } })
+    .then(todo => todo.destroy())
+    .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 
